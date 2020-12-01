@@ -2,3 +2,8 @@ bin/
 obj/
 *.suo
 *.user
+.vs/
+_NCrunch_*/
+*.ncrunchsolution
+.idea
+lib/
