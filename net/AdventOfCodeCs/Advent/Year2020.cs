@@ -8,17 +8,13 @@ namespace AdventOfCodeCs.Advent
         {
             public static long Part1(string input)
             {
-                var parts = input.Split(',');
-                var numbers = parts.Select(x => long.Parse(x)).OrderBy(x => x);
-                for (var n = 0; n < numbers.Count(); n++)
-                    for (var n2 = 1; n2 < numbers.Count(); n2++)
-                    {
-                        var first = numbers.ElementAt(n);
-                        var second = numbers.ElementAt(n2);
-                        if (first + second == 2020)
-                            return first * second;
-                    }
-                return -1L;
+                var numbers = input
+                    .Split(',')
+                    .Select(x => long.Parse(x));
+                var matchingPair = numbers
+                    .SelectMany(x => numbers, (x, y) => new { x, y })
+                    .First(pair => pair.x + pair.y == 2020);
+                return matchingPair.x * matchingPair.y;
             }
 
             public static long Part2(string input)
