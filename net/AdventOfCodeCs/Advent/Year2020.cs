@@ -39,12 +39,51 @@ namespace AdventOfCodeCs.Advent
         {
             public static long Part1(string input)
             {
-                return 0;
+                var totalValid = 0;
+                var lines = input.Split(',');
+                foreach (var line in lines)
+                {
+                    var parts = line.Split(' ');
+
+                    var range = parts[0];
+                    var letter = parts[1];
+                    var password = parts[2];
+
+                    letter = letter.Replace(":", string.Empty);
+                    var rangeParts = range.Split('-');
+                    var lower = int.Parse(rangeParts[0]);
+                    var upper = int.Parse(rangeParts[1]);
+                    var actualCount = password.Count(x => x.ToString() == letter);
+                    if (lower <= actualCount && actualCount <= upper)
+                        totalValid++;
+                }
+                return totalValid;
             }
 
             public static long Part2(string input)
             {
-                return 0;
+                var totalValid = 0;
+                var lines = input.Split(',');
+                foreach (var line in lines)
+                {
+                    var parts = line.Split(' ');
+
+                    var positions = parts[0];
+                    var letter = parts[1];
+                    var password = parts[2];
+
+                    letter = letter.Replace(":", string.Empty);
+                    var posParts = positions.Split('-');
+                    var pos1 = int.Parse(posParts[0]);
+                    var pos2 = int.Parse(posParts[1]);
+                    password = $" {password}";
+                    var pos1valid = password[pos1].ToString() == letter;
+                    var pos2valid = password[pos2].ToString() == letter;
+                    if (pos1valid || pos2valid)
+                        if (!(pos1valid && pos2valid))
+                            totalValid++;
+                }
+                return totalValid;
             }
         }
     }
