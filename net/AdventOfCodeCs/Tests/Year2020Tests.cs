@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdventOfCodeCs.Advent;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace AdventOfCodeCs.Tests
             [Fact]
             void Part1()
             {
-                new InputSet
+                new List<(string, long)>
                 {
                     ("1721,979,366,299,675,1456", 514579L)
                 }.ApplyTests(Year2020.Day1.Part1);
@@ -20,7 +21,7 @@ namespace AdventOfCodeCs.Tests
             [Fact]
             void Part2()
             {
-                new InputSet
+                new List<(string, long)>
                 {
                     ("1721,979,366,299,675,1456", 241861950L)
                 }.ApplyTests(Year2020.Day1.Part2);
@@ -40,7 +41,7 @@ namespace AdventOfCodeCs.Tests
             [Fact]
             void Part1()
             {
-                new InputSet
+                new List<(string, long)>
                 {
                 }.ApplyTests(Year2020.Day2.Part1);
             }
@@ -48,7 +49,7 @@ namespace AdventOfCodeCs.Tests
             [Fact]
             void Part2()
             {
-                new InputSet
+                new List<(string, long)>
                 {
                 }.ApplyTests(Year2020.Day2.Part2);
             }

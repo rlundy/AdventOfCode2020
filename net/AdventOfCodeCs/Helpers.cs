@@ -12,6 +12,4 @@ namespace AdventOfCodeCs
                 Assert.Equal(expected, function(input));
         }
     }
-
-    public class InputSet : List<(string, long)> { }
 }

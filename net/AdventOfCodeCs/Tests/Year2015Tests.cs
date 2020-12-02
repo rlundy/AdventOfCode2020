@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdventOfCodeCs.Advent;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace AdventOfCodeCs.Tests
             [Fact]
             void Part1()
             {
-                new InputSet
+                new List<(string, long)>
                 {
                     ("(())", 0L),
                     ("()()", 0L),
@@ -28,7 +29,7 @@ namespace AdventOfCodeCs.Tests
             [Fact]
             void Part2()
             {
-                new InputSet
+                new List<(string, long)>
                 {
                     (")", 1),
                     ("()())", 5)
