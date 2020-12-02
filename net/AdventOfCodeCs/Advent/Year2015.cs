@@ -12,6 +12,19 @@ namespace AdventOfCodeCs.Advent
                 var down = input.Count(x => x.Equals(')'));
                 return up - down;
             }
+
+            public static long Part2(string input)
+            {
+                var floor = 0;
+                var pos = 0;
+                input.TakeWhile(x =>
+                {
+                    pos++;
+                    floor += x == '(' ? 1 : -1;
+                    return floor >= 0;
+                }).ToList();
+                return pos;
+            }
         }
     }
 }
