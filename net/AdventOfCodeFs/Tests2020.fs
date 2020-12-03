@@ -33,7 +33,7 @@ let ``Year 2020 day 2 part 1`` () =
 [<Fact>]
 let ``Year 2020 day 2 part 2`` () =
     let input = "1-3 a: abcde,1-3 b: cdefg,2-9 c: ccccccccc"
-    let expected = 1L
+    let expected = 1
     let actual = Year2020.Day2.part2 input
     Assert.Equal(expected, actual)
 
