@@ -37,6 +37,8 @@ open System.Diagnostics
 
             member x.InRange count =
                 fst x.Range <= count && count <= snd x.Range
+            member x.LetterCount() =
+                x.Password |> Seq.filter (fun z -> z.ToString().Equals(x.Letter))
 
         let toPasswordLine (item : string) =
             let parts = item.Split(' ')
