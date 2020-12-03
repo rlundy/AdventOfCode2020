@@ -93,5 +93,34 @@ namespace AdventOfCodeCs.Tests
                 Console.WriteLine(Year2020.Day3.Part2(input));
             }
         }
+
+        public class Day4
+        {
+            [Fact]
+            void Part1()
+            {
+                new List<(string, long)>
+                {
+
+                }.ApplyTests(Year2020.Day4.Part1);
+            }
+
+            [Fact]
+            void Part2()
+            {
+                new List<(string, long)>
+                {
+
+                }.ApplyTests(Year2020.Day4.Part2);
+            }
+
+            [Fact]
+            void Solutions()
+            {
+                var input = string.Empty;
+                Console.WriteLine(Year2020.Day4.Part1(input));
+                Console.WriteLine(Year2020.Day4.Part2(input));
+            }
+        }
     }
 }

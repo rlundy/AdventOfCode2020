@@ -142,5 +142,18 @@ namespace AdventOfCodeCs.Advent
                 return treeProduct;
             }
         }
+
+        public class Day4
+        {
+            public static long Part1(string input)
+            {
+                return 0;
+            }
+
+            public static long Part2(string input)
+            {
+                return 0;
+            }
+        }
     }
 }
