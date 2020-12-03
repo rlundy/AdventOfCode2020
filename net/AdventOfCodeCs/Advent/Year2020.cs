@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCodeCs.Advent
 {
@@ -84,6 +85,61 @@ namespace AdventOfCodeCs.Advent
                             totalValid++;
                 }
                 return totalValid;
+            }
+        }
+
+        public class Day3
+        {
+            record Position
+            {
+                public int X { get; set; } = 0;
+                public int Y { get; set; } = 0;
+
+                public void AddSlope(Slope slope)
+                {
+                    X += slope.X;
+                    Y += slope.Y;
+                }
+                public void Wrap(int length)
+                {
+                    if (X >= length)
+                        X -= length;
+                }
+            }
+
+            record Slope(int X, int Y) { }
+
+            static long CountTrees(string input, Slope slope)
+            {
+                var treeCount = 0L;
+                var pos = new Position();
+                var lines = input.Split(',').ToList();
+                var length = lines[0].Length;
+                while (pos.Y < lines.Count)
+                {
+                    var ch = lines[pos.Y][pos.X];
+                    if (ch == '#')
+                        treeCount++;
+                    pos.AddSlope(slope);
+                    pos.Wrap(length);
+                }
+
+                return treeCount;
+            }
+
+            public static long Part1(string input) =>
+                CountTrees(input, new Slope(3, 1));
+
+            public static long Part2(string input)
+            {
+                var treeCounts = new List<long> { 0, 0, 0, 0, 0 };
+                var slopes = new List<Slope> { new Slope(1, 1), new Slope(3, 1), new Slope(5, 1), new Slope(7, 1), new Slope(1, 2) };
+                for (var s = 0; s < slopes.Count; s++)
+                    treeCounts[s] = CountTrees(input, slopes[s]);
+                var treeProduct = 1L;
+                foreach (var tc in treeCounts)
+                    treeProduct *= tc;
+                return treeProduct;
             }
         }
     }
