@@ -30,14 +30,13 @@ open System.Diagnostics
 
         type PasswordLine =
             {
-                LowerBound : int64
-                UpperBound : int64
+                Range : (int64 * int64)
                 Letter : string
                 Password : string
             }
 
             member x.InRange count =
-                x.LowerBound <= count && count <= x.UpperBound
+                fst x.Range <= count && count <= snd x.Range
 
         let toPasswordLine (item : string) =
             let parts = item.Split(' ')
@@ -46,7 +45,7 @@ open System.Diagnostics
             let rangeParts = parts.[0].Split('-')
             let lower = rangeParts.[0] |> int64
             let upper = rangeParts.[1] |> int64
-            { LowerBound = lower; UpperBound = upper; Letter = letter; Password = password }
+            { Range = (lower, upper); Letter = letter; Password = password }
 
         let part1 (input : String) =
             let mutable totalValid = 0L
