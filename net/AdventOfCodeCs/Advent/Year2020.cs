@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCodeCs.Advent
@@ -147,12 +148,208 @@ namespace AdventOfCodeCs.Advent
         {
             public static long Part1(string input)
             {
-                return 0;
+                var validPassports = 0L;
+                var passports = input.Split(",,").Select(x => new Passport(x));
+                foreach (var p in passports)
+                    if (p.HasAllRequiredFields())
+                        validPassports++;
+                return validPassports;
+            }
+
+            public class Passport
+            {
+                readonly Dictionary<string, string> passportData = new();
+                readonly List<string> requiredFields = new() { "byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid" };
+                readonly Dictionary<string, Validation> validations = GetValidations();
+
+                public Passport(string input)
+                {
+                    var separators = new string[] { " ", "," };
+                    var fieldsValues = input.Split(separators, StringSplitOptions.None);
+                    foreach (var fv in fieldsValues)
+                    {
+                        var parts = fv.Split(":");
+                        passportData.Add(parts[0], parts[1]);
+                    }
+                }
+
+                public static Dictionary<string, Validation> GetValidations()
+                {
+                    var validations = new Dictionary<string, Validation>();
+                    validations.Add("byr", new Validation(value =>
+                    {
+                        return Validation.IsInRange(value, 1920, 2002);
+                    }));
+                    validations.Add("iyr", new Validation(value =>
+                    {
+                        return Validation.IsInRange(value, 2010, 2020);
+                    }));
+                    validations.Add("eyr", new Validation(value =>
+                    {
+                        return Validation.IsInRange(value, 2020, 2030);
+                    }));
+                    validations.Add("hgt", new Validation(value =>
+                    {
+                        if (value.EndsWith("cm"))
+                        {
+                            var isValid = int.TryParse(value.Replace("cm", string.Empty), out var cmHeight);
+                            if (!isValid)
+                                return false;
+                            return Validation.IsInRange(cmHeight, 150, 193);
+                        }
+                        else if (value.EndsWith("in"))
+                        {
+                            var isValid = int.TryParse(value.Replace("in", string.Empty), out var inHeight);
+                            if (!isValid)
+                                return false;
+                            return Validation.IsInRange(inHeight, 59, 76);
+                        }
+                        else
+                            return false;
+                    }));
+                    validations.Add("hcl", new Validation(value =>
+                    {
+                        if (!value.StartsWith('#'))
+                            return false;
+                        for (var i = 1; i < value.Length; i++)
+                        {
+                            var ch = value[i];
+                            if (!"abcdef0123456789".Contains(ch))
+                                return false;
+                        }
+                        return true;
+                    }));
+                    validations.Add("ecl", new Validation(value =>
+                    {
+                        var validValues = new List<string> { "amb", "blu", "brn", "gry", "grn", "hzl", "oth" };
+                        return validValues.Contains(value);
+                    }));
+                    validations.Add("pid", new Validation(value =>
+                    {
+                        if (value.Length != 9)
+                            return false;
+                        foreach (var ch in value)
+                            if (!"0123456789".Contains(ch))
+                                return false;
+                        return true;
+                    }));
+                    return validations;
+                }
+
+                public bool HasAllRequiredFields()
+                {
+                    foreach (var req in requiredFields)
+                        if (!passportData.ContainsKey(req))
+                            return false;
+                    return true;
+                }
+
+                public bool IsValid()
+                {
+                    foreach (var field in requiredFields)
+                    {
+                        var validator = validations[field];
+                        if (!passportData.TryGetValue(field, out var value))
+                            return false;
+                        if (!validator.IsValid(value))
+                            return false;
+                    }
+                    return true;
+                }
+            }
+
+            public record Validation(Func<string, bool> ValidationFunction)
+            {
+                public bool IsValid(string fieldValue) => ValidationFunction(fieldValue);
+                public static bool IsInRange(string valueText, int from, int to)
+                {
+                    var isValid = int.TryParse(valueText, out var value);
+                    if (!isValid)
+                        return false;
+                    return IsInRange(value, from, to);
+                }
+                public static bool IsInRange(int value, int from, int to)
+                {
+                    return from <= value && value <= to;
+                }
             }
 
             public static long Part2(string input)
             {
-                return 0;
+                var passports = input.Split(",,").Select(x => new Passport(x));
+                return passports.Count(x => x.IsValid());
+            }
+
+            record ValidRange(int From, int To) { }
+        }
+
+        public class Day5
+        {
+            static long GetSeatID(string seatPartitioning)
+            {
+                var rows = seatPartitioning.Where(x => x == 'F' || x == 'B');
+                var columns = seatPartitioning.Where(x => x == 'L' || x == 'R');
+                var allSeats = new List<int>(Enumerable.Range(0, 128));
+                var allColumns = new List<int>(Enumerable.Range(0, 8));
+                foreach (var row in rows)
+                {
+                    var count = allSeats.Count / 2;
+                    switch (row)
+                    {
+                        case 'F':
+                            allSeats.RemoveRange(allSeats.Count / 2, count);
+                            break;
+                        case 'B':
+                            allSeats.RemoveRange(0, count);
+                            break;
+                        default:
+                            throw new InvalidOperationException($"Bad row: {row}");
+                    }
+                }
+                var seat = allSeats[0];
+                foreach (var col in columns)
+                {
+                    var count = allColumns.Count / 2;
+                    switch (col)
+                    {
+                        case 'L':
+                            allColumns.RemoveRange(allColumns.Count / 2, count);
+                            break;
+                        case 'R':
+                            allColumns.RemoveRange(0, count);
+                            break;
+                        default:
+                            throw new InvalidOperationException($"Bad column: {col}");
+                    }
+                }
+                var column = allColumns[0];
+                var seatID = seat * 8 + column;
+                return seatID;
+            }
+
+            public static long Part1(string input)
+            {
+                return input
+                    .Split(',')
+                    .Select(x => GetSeatID(x))
+                    .Max();
+            }
+
+            public static long Part2(string input)
+            {
+                var allSeatIDs = input
+                    .Split(',')
+                    .Select(x => GetSeatID(x))
+                    .OrderBy(x => x)
+                    .ToList();
+                for (var id = 0; id < allSeatIDs.Count - 1; id++)
+                {
+                    var thisID = allSeatIDs[id];
+                    var nextID = allSeatIDs[id + 1];
+                    if (nextID - thisID == 2)
+                        return thisID + 1;
+                }
+                return int.MinValue;
             }
         }
     }
