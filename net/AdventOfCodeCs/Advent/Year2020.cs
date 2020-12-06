@@ -357,11 +357,11 @@ namespace AdventOfCodeCs.Advent
         {
             public static long Part1(string input)
             {
-                var yeses = 0;
-                var groups = input.Split("\n\n");
-                foreach (var group in groups)
-                    yeses += string.Join(string.Empty, group.Split('\n')).Distinct().Count();
-                return yeses;
+                return input
+                    .Split("\n\n")
+                    .Aggregate(0, (accumulator, group) => accumulator += string.Join(string.Empty, group.Split('\n'))
+                    .Distinct()
+                    .Count());
             }
 
             public static long Part2(string input)
