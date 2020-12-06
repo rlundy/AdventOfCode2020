@@ -53,7 +53,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part1(string input)
             {
                 var wrappingFeet = 0;
-                var eachPresent = input.Split(',');
+                var eachPresent = input.Split('\n');
                 foreach (var dimensions in eachPresent)
                     wrappingFeet += GetWrappingFeet(dimensions);
                 return wrappingFeet;
@@ -73,7 +73,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part2(string input)
             {
                 var ribbonFeet = 0;
-                var eachPresent = input.Split(',');
+                var eachPresent = input.Split('\n');
                 foreach (var dimensions in eachPresent)
                     ribbonFeet += GetRibbonFeet(dimensions);
                 return ribbonFeet;

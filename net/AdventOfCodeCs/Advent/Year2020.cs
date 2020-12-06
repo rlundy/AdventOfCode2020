@@ -11,7 +11,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part1(string input)
             {
                 var numbers = input
-                    .Split(',')
+                    .Split('\n')
                     .Select(x => long.Parse(x));
                 var matchingPair = numbers
                     .SelectMany(x => numbers, (x, y) => new { x, y })
@@ -21,7 +21,7 @@ namespace AdventOfCodeCs.Advent
 
             public static long Part2(string input)
             {
-                var parts = input.Split(',');
+                var parts = input.Split('\n');
                 var numbers = parts.Select(x => long.Parse(x)).OrderBy(x => x);
                 for (var n = 0; n < numbers.Count(); n++)
                     for (var n2 = 1; n2 < numbers.Count(); n2++)
@@ -42,7 +42,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part1(string input)
             {
                 var totalValid = 0;
-                var lines = input.Split(',');
+                var lines = input.Split('\n');
                 foreach (var line in lines)
                 {
                     var parts = line.Split(' ');
@@ -65,7 +65,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part2(string input)
             {
                 var totalValid = 0;
-                var lines = input.Split(',');
+                var lines = input.Split('\n');
                 foreach (var line in lines)
                 {
                     var parts = line.Split(' ');
@@ -114,7 +114,7 @@ namespace AdventOfCodeCs.Advent
             {
                 var treeCount = 0L;
                 var pos = new Position();
-                var lines = input.Split(',').ToList();
+                var lines = input.Split('\n').ToList();
                 var length = lines[0].Length;
                 while (pos.Y < lines.Count)
                 {
@@ -149,7 +149,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part1(string input)
             {
                 var validPassports = 0L;
-                var passports = input.Split(",,").Select(x => new Passport(x));
+                var passports = input.Split("\n\n").Select(x => new Passport(x));
                 foreach (var p in passports)
                     if (p.HasAllRequiredFields())
                         validPassports++;
@@ -164,7 +164,7 @@ namespace AdventOfCodeCs.Advent
 
                 public Passport(string input)
                 {
-                    var separators = new string[] { " ", "," };
+                    var separators = new string[] { " ", "\n" };
                     var fieldsValues = input.Split(separators, StringSplitOptions.None);
                     foreach (var fv in fieldsValues)
                     {
@@ -276,7 +276,7 @@ namespace AdventOfCodeCs.Advent
 
             public static long Part2(string input)
             {
-                var passports = input.Split(",,").Select(x => new Passport(x));
+                var passports = input.Split("\n\n").Select(x => new Passport(x));
                 return passports.Count(x => x.IsValid());
             }
 
@@ -330,7 +330,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part1(string input)
             {
                 return input
-                    .Split(',')
+                    .Split('\n')
                     .Select(x => GetSeatID(x))
                     .Max();
             }
@@ -338,7 +338,7 @@ namespace AdventOfCodeCs.Advent
             public static long Part2(string input)
             {
                 var allSeatIDs = input
-                    .Split(',')
+                    .Split('\n')
                     .Select(x => GetSeatID(x))
                     .OrderBy(x => x)
                     .ToList();
@@ -350,6 +350,33 @@ namespace AdventOfCodeCs.Advent
                         return thisID + 1;
                 }
                 return int.MinValue;
+            }
+        }
+
+        public class Day6
+        {
+            public static long Part1(string input)
+            {
+                var yeses = 0;
+                var groups = input.Split("\n\n");
+                foreach (var group in groups)
+                    yeses += string.Join(string.Empty, group.Split('\n')).Distinct().Count();
+                return yeses;
+            }
+
+            public static long Part2(string input)
+            {
+                var yeses = 0;
+                var groups = input.Split("\n\n");
+                foreach (var group in groups)
+                {
+                    var allAnswers = "abcdefghijklmnopqrstuvwxyz".AsEnumerable().ToList();
+                    var answerSets = group.Split('\n');
+                    foreach (var answerSet in answerSets)
+                        allAnswers.RemoveAll(x => !answerSet.Contains(x));
+                    yeses += allAnswers.Count;
+                }
+                return yeses;
             }
         }
     }
