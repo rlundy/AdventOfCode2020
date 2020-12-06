@@ -7,3 +7,4 @@ _NCrunch_*/
 *.ncrunchsolution
 .idea
 lib/
+PuzzleInput/
